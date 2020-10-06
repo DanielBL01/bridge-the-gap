@@ -9,6 +9,7 @@ verify_ssl = true
 flask = "*"
 google-cloud-translate = "==2.0.1"
 flask-socketio = "*"
+flask-wtf = "*"
 
 [requires]
 python_version = "3.8"
