@@ -1,0 +1,18 @@
+<!-- 
+    Using macros to render forms to create cleaner code on template side
+-->
+
+{% macro render_field(field, placeholderValue) %}
+
+    <div>
+        {{ field(class_ = 'form-control',
+            placeholder=placeholderValue, **kwargs)}}
+
+        <ul>
+            {% for err in field.errors %}
+                <li>{{ err }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+{% endmacro %}

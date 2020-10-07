@@ -1,4 +1,6 @@
-{% extends 'base.html' %} 
+{% from "_formhelper.html" import render_field %}
+
+{% extends "base.html" %} 
 
 {% block title %}Registration{% endblock %}
 
@@ -6,39 +8,10 @@
     <h1>Registration Page - Let's talk with friends and family!</h1>
 
     <form action="{{ url_for('index')}}", method="POST">
-        <div>
-            {{ my_form.username(class_ = 'form-control',
-                placeholder='Username', autocomplete='off',
-                autofocus=true)}}
 
-            <ul>
-                {% for err in my_form.username.errors %}
-                    <li>{{ err }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-
-        <div>
-            {{ my_form.password(class_ = 'form-control',
-                placeholder='Password')}}
-
-            <ul>
-                {% for err in my_form.password.errors %}
-                    <li>{{ err }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-
-        <div>
-            {{ my_form.password_confirm(class_ = 'form-control',
-                placeholder='Confirm Password')}}
-
-            <ul>
-                {% for err in my_form.password_confirm.errors %}
-                    <li>{{ err }}</li>
-                {% endfor %}
-            </ul>
-        </div>
+        {{ render_field(my_form.username, 'Username', autocomplete="Off", autofocus=true) }}
+        {{ render_field(my_form.password, 'Password') }}
+        {{ render_field(my_form.password_confirm, 'Confirm Password') }}
 
         <div>
             {{ my_form.submit_button }}

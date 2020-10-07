@@ -10,6 +10,8 @@ flask = "*"
 google-cloud-translate = "==2.0.1"
 flask-socketio = "*"
 flask-wtf = "*"
+nltk = "*"
+profanity-check = "*"
 
 [requires]
 python_version = "3.8"
