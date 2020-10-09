@@ -1,6 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import InputRequired, Length, EqualTo
+from wtforms.validators import InputRequired, Length, EqualTo, ValidationError
+
+from models import User
 
 class RegistrationForm(FlaskForm):
 	'''
@@ -25,3 +27,39 @@ class RegistrationForm(FlaskForm):
 		EqualTo('password', message="Passwords must match")])
 
 	submit_button = SubmitField('Create')
+
+	def validate_username(self, username):
+		'''
+		Custom validation to check for duplicate usernames
+
+		Parameters:
+		username: username field POST data
+		'''
+		user_object = User.query.filter_by(username=username.data).first()
+		if user_object:
+			raise ValidationError("This Username is already taken! Try a different username")
+
+class LoginForm(FlaskForm):
+	'''Login Form'''
+
+	username = StringField('username_label', 
+		validators=[InputRequired(message="Username is required")])
+
+	password = StringField('password_label',
+		validators=[InputRequired(message="Password is required")])
+
+	submit_button = SubmitField('Login')
+
+	def validate_password(form, field):
+		user_password_entered = field.data
+		user_username_entered = form.username.data
+
+		user_object = User.query.filter_by(username=user_username_entered).first()
+		if user_object is None:
+			raise ValidationError("Username or password is incorrect")
+		
+		elif user_password_entered != user_object.password:
+			raise ValidationError("Username or password is incorrect")
+
+
+		
