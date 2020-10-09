@@ -6,7 +6,20 @@
     <title>{% block title %}{% endblock %} - Bridge the Gap</title>
 </head>
 <body>
+	<!-- Flask flash only appear once for each request that calls the flash -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul class=flashes>
+            {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
     {% block content %}
+    
     {% endblock %}
+
 </body>
 </html>

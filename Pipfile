@@ -15,6 +15,7 @@ profanity-check = "*"
 flask-sqlalchemy = "*"
 psycopg2 = "*"
 passlib = "*"
+flask-login = "*"
 
 [requires]
 python_version = "3.8"
