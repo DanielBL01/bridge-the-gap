@@ -21,9 +21,15 @@ def index():
 	if registration_form.validate_on_submit():
 		username = registration_form.username.data
 		password = registration_form.password.data
+		
+		''' 
+		Currently password is in plain text. Let's generate a hash from password.
+		The pbkdf2_sha256 module actually applies both salt and iteration as discussed in the README
+		'''
+		hashed_password = pbkdf2_sha256.hash(password)
 
 		# Save user to database
-		user = User(username=username, password=password)
+		user = User(username=username, password=hashed_password)
 		db.session.add(user)
 		db.session.commit()
 
@@ -42,5 +48,6 @@ def login():
 
 	# Handling case if user uses GET method to visit login page
 	return render_template("login.html", my_form=login_form)
+
 if __name__ == "__main__":
 	app.run(debug=True)
