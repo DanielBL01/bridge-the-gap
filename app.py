@@ -1,6 +1,7 @@
 from flask import Flask, flash, render_template, redirect, url_for
 from flask_login import LoginManager, login_user, logout_user, current_user, login_required
-
+from flask_socketio import SocketIO, send, emit, join_room, leave_room
+from time import localtime, strftime
 from wtform import *
 from models import *
 
@@ -9,7 +10,11 @@ app = Flask(__name__)
 app.secret_key = 'SECRET KEY'
 
 # Configure database hosted by Heroku
-app.config['SQLALCHEMY_DATABASE_URI'] = 'SECRET HEROKU DATABASE URI'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'SECRET HEROKU DATABASE URI' 
+socketio = SocketIO(app)
+
+predefined_rooms = ["general", "coding", "co-op"]
+
 db = SQLAlchemy(app)
 
 login_manager = LoginManager(app)
@@ -67,7 +72,7 @@ def chat():
 		flash('Please login.', 'danger') 
 		return redirect(url_for('login'))
 
-	return "Welcome to Bridge the Gap chat room!"
+	return render_template('chat.html', username=current_user.username, rooms=predefined_rooms)
 
 @app.route("/logout", methods=['GET'])
 def logout():
@@ -75,6 +80,32 @@ def logout():
 	logout_user()
 	flash('You have sucessfully logged out', 'sucess')
 	return redirect(url_for('login'))
+	
+# server 'messsage' event handler
+@socketio.on('message')
+def handle_message(message):
+	print(f'\n{message}\n')
+	'''
+	The "send" method broadcasts the message to all clients which are connected 
+	and the message is passed to the client 'message' event handler
+	'''
+	send({'msg': message['msg'], 'username': message['username'],
+		'time': strftime("%b %d, %I:%M%p", localtime())}, room=message['room'])
+
+@socketio.on('join')
+def handle_join(data):
+	join_room(data['room'])
+
+	send({'msg': data['username'] + " has joined the chat room: " + data['room']}, 
+		room=data['room'])
+
+
+@socketio.on('leave')
+def handle_leave(data):
+	leave_room(data['room'])
+
+	send({'msg': data['username'] + " has left the chat room: " + data['room']}, 
+		room=data['room'])
 
 if __name__ == "__main__":
-	app.run(debug=True)
+	socketio.run(app, debug=True)

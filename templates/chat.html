@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Room - Bridge the Gap</title>
+</head>
+<body>
+    <!-- Navigation bar -->
+    <nav>
+
+    </nav>
+
+    <div id="main-body">
+        <!-- Choose a chat room -->
+        <nav id="chat-rooms">
+            <h4>Chat Rooms</h4>
+            {% for room in rooms %}
+                <p id="select-room">{{ room|title }}</p>
+            {% endfor %}
+        </nav>
+
+        <div id="rightside-panel">
+            <!-- Display user messages -->
+            <div id="display-messages">
+
+            </div>
+            
+            <!-- Send messages -->
+            <div id="input-box">
+                <input type="text" id="user_message" placeholder="Type a message..." autocomplete="off">
+                <button type="button" id="send_message">send</button>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const username = `{{ username }}`;
+    </script>
+
+    <script src="{{ url_for('static', filename='js/activate_enter_key.js') }}"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='js/socketio.js') }}"></script>
+</body>
+</html>
