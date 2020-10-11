@@ -1,4 +1,4 @@
-# About the Project - Bridge the Gap
+# About: Bridge the Gap (In Development)
 
 A web chat that utilizes web sockets to allows for live chat between users. Users are
 allowed to create their own chat rooms where two users can asynchronously text one another. When texting,

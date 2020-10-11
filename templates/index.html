@@ -20,4 +20,8 @@
         {{ my_form.csrf_token}}
 
     </form>
+
+    <div>
+        <p>Already registered? <a href="{{ url_for('login') }}">Login</a></p>
+    </div>
 {% endblock %}

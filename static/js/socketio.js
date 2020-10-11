@@ -1,7 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Connect to the socketio server
-    var socket = io();
+    const socket = io();
 
+    const username = document.querySelector('#get-username').innerHTML;
+    
+    // Set default room to General
     let room = "General";
     joinRoom("General");
 
@@ -23,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } 
     });
 
-    // Send messages
+    // Sends the message to the 'message' event handler on the server
     document.querySelector('#send_message').onclick = () => {
         socket.send({'msg': document.querySelector('#user_message').value,
             'username': username, 'room': room});
@@ -32,12 +35,12 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector('#user_message').value = '';
     }
 
-    // Room Selection
+    // Room Selection to leave and join a new room
     document.querySelectorAll('#select-room').forEach(p => {
         p.onclick = () => {
             let newRoom = p.innerHTML;
             if (newRoom == room) {
-                msg = `You are already in the room ${room}.`
+                msg = `You are already in the room: ${room}.`
                 displayMessage(msg)
             } else {
                 leaveRoom(room);
@@ -47,20 +50,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    function displayMessage(message) {
-        const p = document.createElement('p');
-        p.innerHTML = message;
-        document.querySelector('#display-messages').append(p);
-    }
-
+    // Sends data of the user and room to the 'join' event on the server
     function joinRoom(room) {
         socket.emit('join', {'username': username, 'room': room});
+        
+        // Focus input field when user joins a room
+        document.querySelector('#user_message').focus()
     }
 
+    // Sends data of the user and room to the 'leave' event on the server
     function leaveRoom(room) {
         socket.emit('leave', {'username': username, 'room': room});
 
         // Clear your messages
         document.querySelector('#display-messages').innerHTML = ''
+    }
+
+    function displayMessage(message) {
+        const p = document.createElement('p');
+        p.innerHTML = message;
+        document.querySelector('#display-messages').append(p);
     }
 })

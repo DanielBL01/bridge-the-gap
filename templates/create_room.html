@@ -1,0 +1,16 @@
+{% extends "base.html" %} 
+
+{% block title %}Create a Room{% endblock %}
+
+{% block content %}
+    <h1>Create your own chat room 😎</h1>
+
+    <form action="{{ url_for('create')}}", method="POST">
+        <input type="text" name="room" autofocus>
+        <input type="submit" value="Create">
+    </form>
+
+    {% if error is not none %}
+        <p>{{ error }}</p>
+    {% endif %}
+{% endblock %}
