@@ -14,10 +14,17 @@
     <div id="main-body">
         <!-- Choose a chat room -->
         <nav id="chat-rooms">
-            <h4>Chat Rooms <a href="{{ url_for('create') }}">New Room</a></h4>
+            <h4>Chat Rooms</h4>
             {% for room in rooms %}
                 <p id="select-room">{{ room|title }}</p>
             {% endfor %}
+
+            <!-- User create room -->
+            <div>
+                <input type="text" id="room-name" placeholder="Create a new room..." autocomplete="off">
+                <button type="button" id="create-room">Create</button>
+            </div>
+
         </nav>
 
         <div id="rightside-panel">

@@ -10,10 +10,10 @@ app = Flask(__name__)
 app.secret_key = 'SECRET KEY'
 
 # Configure database hosted by Heroku
-app.config['SQLALCHEMY_DATABASE_URI'] = 'SECRET HEROKU DATABASE URI'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'SECRET HEROKU DATABASE URL'
 socketio = SocketIO(app)
 
-rooms_list = ["general lounge"]
+rooms_list = ["general"]
 
 db = SQLAlchemy(app)
 
@@ -145,6 +145,17 @@ def handle_leave(data):
 
 	leave_room(room)
 	send({'msg': username + " has left the chat room: " + room}, 
+		room = room)
+
+@socketio.on('create')
+def handle_create(data):
+	username = data['username']
+	room = data['room']
+
+	rooms_list.append(room)
+	join_room(room)
+
+	send({'msg': "This is your new room " + username + "!"},
 		room = room)
 
 if __name__ == "__main__":

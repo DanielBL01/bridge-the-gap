@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Connect to the socketio server
+    // Connection between the client and the server
     const socket = io();
 
     const username = document.querySelector('#get-username').innerHTML;
@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     joinRoom("General");
 
     // Display incoming messages to the chat room
-    socket.on('message', data => {
+    socket.on('message', (data) => {
         const p = document.createElement('p');
         const username = document.createElement('span');
         const time = document.createElement('span');
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
             displayMessage(data.msg);
         } 
     });
-
+ 
     // Sends the message to the 'message' event handler on the server
     document.querySelector('#send_message').onclick = () => {
         socket.send({'msg': document.querySelector('#user_message').value,
@@ -50,6 +50,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    document.querySelector('#create-room').onclick = () => {
+        // When the user creates a room, the user should join the specified room
+        let newRoom = document.querySelector('#room-name').value;
+        leaveRoom(room);
+        createRoom(newRoom);
+        room = newRoom
+    }
+
     // Sends data of the user and room to the 'join' event on the server
     function joinRoom(room) {
         socket.emit('join', {'username': username, 'room': room});
@@ -64,6 +72,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Clear your messages
         document.querySelector('#display-messages').innerHTML = ''
+    }
+
+    function createRoom(room) {
+        socket.emit('create', {'username': username, 'room': room});
+
+        document.querySelector('#user_message').focus()
     }
 
     function displayMessage(message) {

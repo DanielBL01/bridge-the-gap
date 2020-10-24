@@ -33,3 +33,6 @@ hashing. This random string is called salt. This essentially means that even if 
 passwords, they will have different encrypted passwords in the database. This will cause the rainbow table to grow exponentially since now all possible random strings must be considered. Sadly, this does not help us with the first approach where the attack is a brute force method.
 
 - To fight against the brute force method, we can also define how many times the hashing function will run. Adding more iterations will make the hashing function slower and this will make the brute force attack difficult to pull off since it will take a much longer time to test out each possible key. 
+
+## Learning Socket.IO
+
